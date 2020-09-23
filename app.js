@@ -1,6 +1,7 @@
 
-
-// BUDGET CONTROLLER
+/*--------------------------
+ BUDGET CONTROLLER
+ ---------------------------  */
 var budgetController = (function() {
 
   var Expense = function(id, description, value) {
@@ -113,7 +114,16 @@ var budgetController = (function() {
 
 
 
-// UI CONTROLLER
+
+
+
+
+
+
+
+/*--------------------------
+ UI CONTROLLER
+ ---------------------------  */
 var interfaceController = (function() {
 
   var DOMstrings = {
@@ -165,6 +175,11 @@ var interfaceController = (function() {
       document.querySelector(element).insertAdjacentHTML('beforeend', newHTML);
     },
 
+    deleteListItem: function(selectorID) {
+      var el = document.getElementById(selectorID);
+      el.parentNode.removeChild(el);
+    },
+
     clearFields: function() {
       var fields, fieldsArr;
 
@@ -197,7 +212,19 @@ var interfaceController = (function() {
 
 
 
-// GLOBAL APPLICATION CONTROLLER
+
+
+
+
+
+
+
+
+
+
+/*--------------------------
+ GLOBAL APPLICATION CONTROLLER
+ ---------------------------  */
 var controller = (function(budgetCtrl, interfaceCtrl) {
 
   var setupEventListeners = function() {
@@ -259,14 +286,16 @@ var controller = (function(budgetCtrl, interfaceCtrl) {
       splitID = itemID.split('-');
       type = splitID[0];
       ID = parseInt(splitID[1]);
+
+      // 1. Delete item from the data structure
+      budgetCtrl.deleteItem(type, ID);
+
+      // 2. Delete item from the UI
+      interfaceCtrl.deleteListItem(itemID);
+
+      // 3. Update and display the new budget
+      updateBudget();
     }
-
-    // 1. Delete item from the data structure
-    budgetCtrl.deleteItem(type, ID);
-    // 2. Delete item from the UI
-
-    // 3. Update and display the new budget
-
   };
 
   return {
