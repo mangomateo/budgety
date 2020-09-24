@@ -193,6 +193,12 @@ var interfaceController = (function() {
     return (type === 'exp' ? '-' : '+') + ' ' + int + '.' + dec;
   };
 
+  var nodeListForEach = function(list, callback) {
+    for (var i = 0; i < list.length; i++) {
+      callback(list[i], i);
+    }
+  };
+
   // Some code
   return {
     getInput: function() {
@@ -265,12 +271,6 @@ var interfaceController = (function() {
 
       var fields = document.querySelectorAll(DOMstrings.expensesPctLabel);
 
-      var nodeListForEach = function(list, callback) {
-        for (var i = 0; i < list.length; i++) {
-          callback(list[i], i);
-        }
-      };
-
       nodeListForEach(fields, function(current, index) {
 
         if (percentages[index] > 0) {
@@ -283,7 +283,7 @@ var interfaceController = (function() {
 
     },
 
-    displayMonth: function() {
+    displayDate: function() {
       var now, year, month;
 
       now = new Date();
@@ -295,6 +295,20 @@ var interfaceController = (function() {
                 'Oct', 'Nov', 'Dec'];
 
       document.querySelector(DOMstrings.dateLabel).textContent = months[month] + ' ' + year;
+    },
+
+    changedType: function() {
+      var fields;
+
+      fields = document.querySelectorAll(DOMstrings.inputType + ',' +
+                                         DOMstrings.inputDescription + ',' +
+                                         DOMstrings.inputValue);
+
+      nodeListForEach(fields, function(current) {
+        current.classList.toggle('red-focus');
+      });
+
+      document.querySelector(DOMstrings.inputButton).classList.toggle('red');
     }
 
   };
@@ -330,6 +344,8 @@ var controller = (function(budgetCtrl, interfaceCtrl) {
     });
 
     document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
+
+    document.querySelector(DOM.inputType).addEventListener('change', interfaceCtrl.changedType);
   };
 
   var updateBudget = function() {
@@ -412,7 +428,7 @@ var controller = (function(budgetCtrl, interfaceCtrl) {
     init: function() {
       console.log('The application has started.');
       setupEventListeners();
-      interfaceCtrl.displayMonth();
+      interfaceCtrl.displayDate();
       interfaceCtrl.displayBudget({
         budget: 0,
         totalInc: 0,
