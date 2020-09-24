@@ -169,7 +169,8 @@ var interfaceController = (function() {
     expensesLabel:        '.budget__expenses--value',
     percentageLabel:      '.budget__expenses--percentage',
     container:            '.container',
-    expensesPctLabel:     '.item__percentage'
+    expensesPctLabel:     '.item__percentage',
+    dateLabel:            '.budget__title--month'
   };
 
   var formatNumber = function(num, type) {
@@ -280,6 +281,20 @@ var interfaceController = (function() {
 
       });
 
+    },
+
+    displayMonth: function() {
+      var now, year, month;
+
+      now = new Date();
+      year = now.getFullYear();
+      month = now.getMonth();
+      months = ['Jan', 'Feb', 'Mar',
+                'Apr', 'May', 'Jun',
+                'Jul', 'Aug', 'Sep',
+                'Oct', 'Nov', 'Dec'];
+
+      document.querySelector(DOMstrings.dateLabel).textContent = months[month] + ' ' + year;
     }
 
   };
@@ -397,6 +412,7 @@ var controller = (function(budgetCtrl, interfaceCtrl) {
     init: function() {
       console.log('The application has started.');
       setupEventListeners();
+      interfaceCtrl.displayMonth();
       interfaceCtrl.displayBudget({
         budget: 0,
         totalInc: 0,
